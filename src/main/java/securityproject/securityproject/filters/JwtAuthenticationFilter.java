@@ -27,7 +27,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
     private final UserService userService;
-    private TokenRepository tokenRepository;
+    private final TokenRepository tokenRepository;
 
     
     @Override
@@ -54,6 +54,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             boolean isTokenValid = tokenRepository.findByToken(jwt)
                         .map(t -> !t.isExpired() && !t.isRevoked())
                         .orElse(false);
+            log.debug("The result of isTokenValid variable is - {}", isTokenValid);
 
             if(jwtService.isTokenValid(jwt, userDetails) && isTokenValid) {
                 log.debug("User - {}", userDetails);

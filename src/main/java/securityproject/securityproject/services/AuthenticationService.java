@@ -12,9 +12,9 @@ import securityproject.securityproject.dto.JwtAuthenticationResponse;
 import securityproject.securityproject.dto.SignInRequest;
 import securityproject.securityproject.dto.SignUpRequest;
 import securityproject.securityproject.models.Role;
+import securityproject.securityproject.models.Token;
 import securityproject.securityproject.models.User;
 import securityproject.securityproject.repositories.UserRepository;
-import securityproject.securityproject.token.Token;
 import securityproject.securityproject.token.TokenRepository;
 import securityproject.securityproject.token.TokenType;
 

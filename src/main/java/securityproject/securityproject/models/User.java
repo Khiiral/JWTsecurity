@@ -8,7 +8,6 @@ import java.util.List;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.token.Token;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import jakarta.persistence.Column;
@@ -55,8 +54,8 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     Role role;
 
-    @OneToMany(mappedBy = "user")
-    private List<Token> tokens;
+   @OneToMany(mappedBy = "user")
+   private List<Token> tokens;
 
 
     @Override
