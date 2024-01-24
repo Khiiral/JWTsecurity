@@ -1,10 +1,13 @@
 package securityproject.securityproject.controllers;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import securityproject.securityproject.dto.JwtAuthenticationResponse;
 import securityproject.securityproject.dto.SignInRequest;
@@ -18,14 +21,16 @@ public class AuthenticationController {
     
     private final AuthenticationService authenticationService;
 
-    @PostMapping("/signup")
-    public JwtAuthenticationResponse signup(@RequestBody SignUpRequest request) {
-        return authenticationService.signup(request);
+    @PostMapping("/register")
+    public ResponseEntity<JwtAuthenticationResponse> signup(@RequestBody @Valid SignUpRequest request) {
+        JwtAuthenticationResponse response = authenticationService.signup(request);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
-    @PostMapping("/signin")
-    public JwtAuthenticationResponse signin(@RequestBody SignInRequest request) {
-        return authenticationService.signin(request);
+    @PostMapping("/login")
+    public ResponseEntity<JwtAuthenticationResponse> signin(@RequestBody @Valid SignInRequest request) {
+        JwtAuthenticationResponse response = authenticationService.signin(request);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     

@@ -65,7 +65,6 @@ public class JwtService {
         return createToken(claims, username);
     }
 
-    //Per creare il token, devo prima aggiungere delle dependency nel pom.xml che si trovano nel file dependencyJwt
     public String createToken(Map<String, Object> claims, String username) {
         return Jwts.builder()
                 .setClaims(claims)
