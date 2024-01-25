@@ -23,7 +23,11 @@ public class UserController {
 
     @GetMapping
     public ResponseEntity<String> userHomePage() {
-        return new ResponseEntity<>("User HomePage", HttpStatus.OK);
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String welcomeMessage = "Welcome " + auth.getName() + ", this is the User HomePage";
+        //This is a comment
+        //this is another comment
+        return new ResponseEntity<>(welcomeMessage, HttpStatus.OK);
     }
 
     
