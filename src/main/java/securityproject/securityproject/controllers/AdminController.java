@@ -47,12 +47,8 @@ public class AdminController {
 
     @DeleteMapping("/deleteUser/{id}")
     public ResponseEntity<Void> deleteUserById(@PathVariable Long id) throws UserNotFoundException {
-        try {
             userService.deleteUserById(id);
             return new ResponseEntity<>(HttpStatus.OK);
-        } catch (UserNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
     }
     
         
