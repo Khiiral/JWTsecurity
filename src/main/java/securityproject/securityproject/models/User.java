@@ -57,7 +57,12 @@ public class User implements UserDetails {
 
    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
    private List<Token> tokens;
+   
+   @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL)
+   private List<Request> sentRequests;
 
+   @OneToMany(mappedBy = "receiver", cascade = CascadeType.ALL)
+   private List<Request> receivedRequests;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
