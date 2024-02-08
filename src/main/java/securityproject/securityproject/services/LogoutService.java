@@ -19,14 +19,19 @@ public class LogoutService implements LogoutHandler {
     @Override
     public void logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
         
+        //Get the header from the request
         final String authHeader = request.getHeader("Authorization");
         final String jwt;
-
+        
+        //If the header is null or doesn't start with Bearer, return
         if(authHeader == null || !authHeader.startsWith("Bearer ")) {
             return;
         }
 
+        //Otherwise, extract the token from the header
         jwt = authHeader.substring(7);
+        
+        //Find the current token and if it is not null, set to TRUE the expiration and revoke it
         var currentToken = tokenRepository.findByToken(jwt).orElse(null);
         if(currentToken != null) {
             currentToken.setExpired(true);

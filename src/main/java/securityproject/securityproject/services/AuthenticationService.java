@@ -63,9 +63,13 @@ public class AuthenticationService {
     }
 
     public JwtAuthenticationResponse signin(SignInRequest request) {
+        //On signin, get the authentication object from the authenticationManager
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
+        //Get the username(email) of the user from the request
         User user = userRepository.findByEmail(request.getEmail()).orElseThrow(() -> new IllegalArgumentException("Invalid email or password."));
+        //Right after, generate the token
         String jwt = jwtService.generateToken(user.getUsername());
+        //Here we remove all the tokens that the user owns, then we save the token in the db
         revokeAllUserTokens(user);
         saveUserToken(user, jwt);
         return JwtAuthenticationResponse.builder().token(jwt).build();

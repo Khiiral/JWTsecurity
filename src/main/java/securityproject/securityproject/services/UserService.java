@@ -5,15 +5,18 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import securityproject.securityproject.dto.UserDTO;
 import securityproject.securityproject.exception.UserNotFoundException;
+import securityproject.securityproject.models.Role;
 import securityproject.securityproject.models.User;
 import securityproject.securityproject.repositories.UserRepository;
 
@@ -74,6 +77,8 @@ public class UserService implements UserDetailsService {
        }
     }
 
+    //Added @Transactional annotation to perform delete operation of user
+    @Transactional
     public void deleteUserById(Long id) throws UserNotFoundException {
        User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User not found with id: " + id));
         userRepository.delete(user);
@@ -85,6 +90,8 @@ public class UserService implements UserDetailsService {
                 .anyMatch(role -> 
                     role.getAuthority().equals(roleName));
     }
+
+    
 
     public UserDTO mapToDTO(User user) {
         UserDTO userDTO = UserDTO
