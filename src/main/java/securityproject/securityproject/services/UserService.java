@@ -86,9 +86,11 @@ public class UserService implements UserDetailsService {
 
     public boolean hasRole(String roleName) {
         User user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        String nameOfTheCurrentUser = "This is not the name of the current user, just messing around";
-        
+        String nameRole = "DEFAULT";
+        //Add useless logic in here
+        if(user.getAuthorities().stream().anyMatch(r -> r.getAuthority().equals(nameRole))) {
+            System.out.println("User has DEFAULT role");
+        }
         return user.getAuthorities().stream()
                 .anyMatch(role -> 
                     role.getAuthority().equals(roleName));
