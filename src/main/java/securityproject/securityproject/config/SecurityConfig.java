@@ -1,5 +1,8 @@
 package securityproject.securityproject.config;
 
+import java.util.Arrays;
+import java.util.Collections;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,7 +18,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import securityproject.securityproject.filters.JwtAuthenticationFilter;
 import securityproject.securityproject.services.UserService;
@@ -50,6 +56,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .csrf(csrf -> csrf.disable())
+            .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .authorizeHttpRequests(authorize -> authorize
                 .requestMatchers("/api/v1/register", "/api/v1/login", "/api/v1/all", "/").permitAll()
                 .requestMatchers("/api/v1/user/**").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
@@ -68,6 +75,28 @@ public class SecurityConfig {
             
 
         return http.build();
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        return new CorsConfigurationSource() {
+
+            @Override
+            public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
+                CorsConfiguration configuration = new CorsConfiguration();
+
+                configuration.setAllowedOrigins(Collections.singletonList("*"));
+                configuration.setAllowedMethods(Collections.singletonList("*"));
+                configuration.setAllowedHeaders(Collections.singletonList("*"));
+                configuration.setAllowCredentials(true);
+                configuration.setExposedHeaders(Arrays.asList("Authorization"));
+                configuration.setMaxAge(3600L);
+
+                return configuration;
+            }
+            
+        };
+        
     }
 
 }
