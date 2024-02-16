@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import securityproject.securityproject.dto.JwtAuthenticationResponse;
 import securityproject.securityproject.dto.SignInRequest;
 import securityproject.securityproject.dto.SignUpRequest;
+import securityproject.securityproject.exception.UserAlreadyExistsException;
 import securityproject.securityproject.models.Role;
 import securityproject.securityproject.models.Token;
 import securityproject.securityproject.models.User;
@@ -31,6 +32,11 @@ public class AuthenticationService {
     
 
     public JwtAuthenticationResponse signup(SignUpRequest request) {
+
+        if(userService.existsByEmail(request.getEmail())) {
+            throw new UserAlreadyExistsException("This email already exists");
+        }
+
         User user = User
                 .builder()
                 .firstName(request.getFirstName())
