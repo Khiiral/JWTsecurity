@@ -139,8 +139,9 @@ public class UserControllerTests {
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.firstName").value("user1Firstname"))
+        .andExpect(jsonPath("$.lastName").value("user1Lastname"))
         .andExpect(jsonPath("$.email").value("user1@gmail.com"));
-        //Minor change to be added here
+        //Add other expectations here
     }
 
     @Test
