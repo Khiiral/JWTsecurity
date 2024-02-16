@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -16,7 +15,6 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import securityproject.securityproject.dto.UserDTO;
 import securityproject.securityproject.exception.UserNotFoundException;
-import securityproject.securityproject.models.Role;
 import securityproject.securityproject.models.User;
 import securityproject.securityproject.repositories.UserRepository;
 
@@ -25,6 +23,8 @@ import securityproject.securityproject.repositories.UserRepository;
 public class UserService implements UserDetailsService {
     
     private final UserRepository userRepository;
+
+    private final JwtService jwtService;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -46,6 +46,24 @@ public class UserService implements UserDetailsService {
             return mapToDTO(user);
         } else {
             throw new UserNotFoundException("User not found with id: " +id); 
+        }
+    }
+
+    //Get user info from the jwt
+    public UserDTO getUserProfile(String jwt) throws UserNotFoundException {
+        System.out.println("This is the jwt token: " + jwt);
+
+        String token = jwt.substring(7);
+        String userEmail = jwtService.extractUsername(token);
+
+        System.out.println(userEmail);
+        
+        Optional<User> userOptional = userRepository.findByEmail(userEmail);
+        if(userOptional.isPresent()) {
+            User user = userOptional.get();
+            return mapToDTO(user);
+        } else {
+            throw new UserNotFoundException("User not found");
         }
     }
 
@@ -89,6 +107,11 @@ public class UserService implements UserDetailsService {
         return user.getAuthorities().stream()
                 .anyMatch(role -> 
                     role.getAuthority().equals(roleName));
+    }
+
+    
+    public boolean existsByEmail(String email) {
+        return userRepository.existsByEmail(email);
     }
 
     
