@@ -138,7 +138,8 @@ public class UserControllerTests {
         .header("Authorization", "Bearer " + jwtToken)
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$.firstName").value("user1Firstname"));
+        .andExpect(jsonPath("$.firstName").value("user1Firstname"))
+        .andExpect(jsonPath("$.email").value("user1@gmail.com"));
         //Minor change to be added here
     }
 
