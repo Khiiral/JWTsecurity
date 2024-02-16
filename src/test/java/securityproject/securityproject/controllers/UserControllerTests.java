@@ -139,6 +139,7 @@ public class UserControllerTests {
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.firstName").value("user1Firstname"));
+        //Minor change to be added here
     }
 
     @Test
