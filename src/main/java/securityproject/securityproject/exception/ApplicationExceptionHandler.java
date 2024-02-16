@@ -36,7 +36,15 @@ public class ApplicationExceptionHandler {
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(RequestNotFoundException.class)
-    public Map<String, String> handleRequetNotFound(RequestNotFoundException ex) {
+    public Map<String, String> handleRequestNotFound(RequestNotFoundException ex) {
+        Map<String, String> errors = new HashMap<>();
+        errors.put("errorMessage", ex.getMessage());
+        return errors;
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(UserAlreadyExistsException.class)
+    public Map<String, String> handleUserAlreadyExistsException(UserAlreadyExistsException ex) {
         Map<String, String> errors = new HashMap<>();
         errors.put("errorMessage", ex.getMessage());
         return errors;
